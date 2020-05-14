@@ -1,5 +1,6 @@
 package Twitter;
 
+import java.util.Properties;
 import java.util.Scanner;
 import com.google.common.collect.Lists;
 import com.twitter.hbc.ClientBuilder;
@@ -11,7 +12,9 @@ import com.twitter.hbc.core.endpoint.StatusesFilterEndpoint;
 import com.twitter.hbc.core.processor.StringDelimitedProcessor;
 import com.twitter.hbc.httpclient.auth.Authentication;
 import com.twitter.hbc.httpclient.auth.OAuth1;
+import org.apache.kafka.clients.producer.*;
 import org.apache.kafka.common.protocol.types.Field;
+import org.apache.kafka.common.serialization.StringSerializer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -35,11 +38,14 @@ public class TwitterProducer {
         Client client= TwitterClient(msgQueue);
         client.connect();
        // create a kafka producer
+        KafkaProducer<String, String> producer = createProducer();
+
 
        //  send tweets to kafka */
         while (!client.isDone()) {
             String msg = null;
             try {
+                //System.out.println("Mesage is null!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
                 msg = msgQueue.poll(5, TimeUnit.SECONDS);
             } catch (InterruptedException e) {
                 e.printStackTrace();
@@ -47,6 +53,14 @@ public class TwitterProducer {
             }
             if (msg != null){
                 logger.info(msg);
+                producer.send(new ProducerRecord<>("twitter-tweets", null, msg), new Callback() {
+                    @Override
+                    public void onCompletion(RecordMetadata recordMetadata, Exception e) {
+                        if (e!=null){
+                            logger.info("Error !!!",e);
+                        }
+                    }
+                });
             }
 
         } logger.info("End of application");
@@ -78,7 +92,7 @@ public class TwitterProducer {
         /** Declare the host you want to connect to, the endpoint, and authentication (basic auth or oauth) */
         Hosts hosebirdHosts = new HttpHosts(Constants.STREAM_HOST);
         StatusesFilterEndpoint hosebirdEndpoint = new StatusesFilterEndpoint();
-// Optional: set up some followings and track terms
+
 
         List<String> terms = Lists.newArrayList("bitcoin");
 
@@ -97,6 +111,22 @@ public class TwitterProducer {
 
         Client hosebirdClient = builder.build();
         return hosebirdClient;
+
+    }
+
+    public KafkaProducer<String,String> createProducer(){
+        // create properties
+        String bootstrapServer = "127.0.0.1:9092";
+        Properties properties = new Properties();
+        properties.setProperty(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG,bootstrapServer);
+        properties.setProperty(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
+        properties.setProperty(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
+
+        //create a kafka producer
+        KafkaProducer<String, String> producer = new KafkaProducer<String, String>(properties);
+        return producer;
+
+
 
     }
 }
