@@ -12,7 +12,7 @@ import org.elasticsearch.client.RestClientBuilder;
 import org.elasticsearch.client.RestHighLevelClient;
 import org.elasticsearch.client.RestClient.FailureListener;
 public class ElasticsearchConsumer {
-    //https://62i7k0lrwx:8w0g7da9ww@kafk-with-twitter-4824160048.eu-west-1.bonsaisearch.net:443
+    
     // create an elasticsearch client
     public static RestHighLevelClient createClient(){
 
