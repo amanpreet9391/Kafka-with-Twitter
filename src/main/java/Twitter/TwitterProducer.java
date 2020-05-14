@@ -12,12 +12,16 @@ import com.twitter.hbc.core.processor.StringDelimitedProcessor;
 import com.twitter.hbc.httpclient.auth.Authentication;
 import com.twitter.hbc.httpclient.auth.OAuth1;
 import org.apache.kafka.common.protocol.types.Field;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.List;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.TimeUnit;
 
 public class TwitterProducer {
+    Logger logger = LoggerFactory.getLogger(TwitterProducer.class.getName());
     public TwitterProducer(){}
     public static void main(String[] args) {
 
@@ -33,7 +37,19 @@ public class TwitterProducer {
        // create a kafka producer
 
        //  send tweets to kafka */
+        while (!client.isDone()) {
+            String msg = null;
+            try {
+                msg = msgQueue.poll(5, TimeUnit.SECONDS);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+                client.stop();
+            }
+            if (msg != null){
+                logger.info(msg);
+            }
 
+        } logger.info("End of application");
 
 
 
@@ -64,7 +80,7 @@ public class TwitterProducer {
         StatusesFilterEndpoint hosebirdEndpoint = new StatusesFilterEndpoint();
 // Optional: set up some followings and track terms
 
-        List<String> terms = Lists.newArrayList("kafka");
+        List<String> terms = Lists.newArrayList("bitcoin");
 
         hosebirdEndpoint.trackTerms(terms);
 
