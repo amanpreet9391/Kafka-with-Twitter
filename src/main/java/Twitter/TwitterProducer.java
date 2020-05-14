@@ -40,6 +40,14 @@ public class TwitterProducer {
        // create a kafka producer
         KafkaProducer<String, String> producer = createProducer();
 
+        //adding a shutdown hook
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+            logger.info("Shutting down the application");
+            logger.info("Shutting down the client");
+            client.stop();
+            producer.close();
+            logger.info("done");
+        }));
 
        //  send tweets to kafka */
         while (!client.isDone()) {
@@ -94,7 +102,7 @@ public class TwitterProducer {
         StatusesFilterEndpoint hosebirdEndpoint = new StatusesFilterEndpoint();
 
 
-        List<String> terms = Lists.newArrayList("bitcoin");
+        List<String> terms = Lists.newArrayList("Kafka");
 
         hosebirdEndpoint.trackTerms(terms);
 
