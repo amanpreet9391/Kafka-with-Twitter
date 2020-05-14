@@ -25,17 +25,20 @@ public class TwitterProducer {
         new TwitterProducer().run();
     }
     public void run(){
-       /** create a twitter client
+        BlockingQueue<String> msgQueue = new LinkedBlockingQueue<>(1000);
+       //create a twitter client
+        // Attempts to establish a connection.
+        Client client= TwitterClient(msgQueue);
+        client.connect();
+       // create a kafka producer
 
-        create a kafka producer
-
-         send tweets to kafka */
-
+       //  send tweets to kafka */
+        
 
 
 
     }
-    public void TwitterClient(){
+    public Client TwitterClient(BlockingQueue<String> msgQueue){
 
         Scanner obj1 = new Scanner(System.in);
         String consumerkey;
@@ -55,7 +58,7 @@ public class TwitterProducer {
         secret = obj4.next();
 
 
-        BlockingQueue<String> msgQueue = new LinkedBlockingQueue<>(100000);
+
         /** Declare the host you want to connect to, the endpoint, and authentication (basic auth or oauth) */
         Hosts hosebirdHosts = new HttpHosts(Constants.STREAM_HOST);
         StatusesFilterEndpoint hosebirdEndpoint = new StatusesFilterEndpoint();
@@ -77,8 +80,7 @@ public class TwitterProducer {
 
 
         Client hosebirdClient = builder.build();
-// Attempts to establish a connection.
-        hosebirdClient.connect();
+        return hosebirdClient;
 
     }
 }
