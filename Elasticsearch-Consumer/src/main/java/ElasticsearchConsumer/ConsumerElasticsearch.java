@@ -1,5 +1,6 @@
 package ElasticsearchConsumer;
 
+import com.google.gson.JsonParser;
 import org.apache.http.HttpHost;
 import org.apache.http.auth.AuthScope;
 import org.apache.http.auth.UsernamePasswordCredentials;
@@ -31,6 +32,7 @@ public class ConsumerElasticsearch {
     // create an elasticsearch client
 
     public static RestHighLevelClient createClient() {
+
 
         /** Enter your own hostname, username and password. you can use bonsai.io to get free elasticsearch cluster with 3 nodes.     */
         String hostname = "";
@@ -93,10 +95,13 @@ public class ConsumerElasticsearch {
                 for(ConsumerRecord<String,String> record: records){
                 //where we insert data into elasticsearch
                     record.value();
-                    IndexRequest indexRequest = new IndexRequest("twitter","tweets").source(record.value(), XContentType.JSON);
+                    String id = extractIdfromTwitter(record.value());
+                    IndexRequest indexRequest = new IndexRequest("twitter","tweets",id).source(record.value(), XContentType.JSON);
+                    //id is to make consumer idempotent
                     IndexResponse indexResponse =client.index(indexRequest, RequestOptions.DEFAULT);
-                    String id = indexResponse.getId();
-                    logger.info(id);
+
+
+                    logger.info(indexResponse.getId());
                     Thread.sleep(1000);  //introduced small delay to see results clearly
 
                 }
@@ -105,6 +110,12 @@ public class ConsumerElasticsearch {
         }
             ///client.close();
         //This will insert jsonString text in the index(twitter) and return id to us.
+    }
+    private static JsonParser jsonParser= new JsonParser();
+    private static String extractIdfromTwitter(String tweetjason){
+        //use gson library
+        return jsonParser.parse(tweetjason).getAsJsonObject().get("id_str").getAsString();
+
     }
 
 
