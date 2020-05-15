@@ -34,6 +34,9 @@ public class ConsumerElasticsearch {
     public static RestHighLevelClient createClient() {
 
 
+
+
+
         /** Enter your own hostname, username and password. you can use bonsai.io to get free elasticsearch cluster with 3 nodes.     */
         String hostname = "";
         String username = "";
@@ -57,6 +60,7 @@ public class ConsumerElasticsearch {
         //returning a client which will allow us to insert data in elasticsearch.
 
     }
+    /** Elasticesearch Java consumer*/
     public static KafkaConsumer<String, String> createConsumer(String topic){
         String bootstrapServer = "127.0.0.1:9092";
         String groupId = "twitter-consumer";
@@ -68,6 +72,10 @@ public class ConsumerElasticsearch {
         properties.setProperty(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class.getName());
         properties.setProperty(ConsumerConfig.GROUP_ID_CONFIG, groupId);
         properties.setProperty(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
+        properties.setProperty(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG, "false"); //disable auto commit
+        properties.setProperty(ConsumerConfig.MAX_POLL_RECORDS_CONFIG, "10");
+
+
         //create kafka consumer
         KafkaConsumer<String,String> consumer = new KafkaConsumer<String, String>(properties);
 
@@ -92,11 +100,14 @@ public class ConsumerElasticsearch {
         KafkaConsumer<String, String> consumer = createConsumer("twitter-tweets") ;
             while(true){
                 ConsumerRecords<String, String> records = consumer.poll(Duration.ofMillis(100));
+
+                logger.info("Received " + records.count() + " records");
+
                 for(ConsumerRecord<String,String> record: records){
                 //where we insert data into elasticsearch
                     record.value();
                     String id = extractIdfromTwitter(record.value());
-                    IndexRequest indexRequest = new IndexRequest("twitter","tweets",id).source(record.value(), XContentType.JSON);
+                    IndexRequest indexRequest = new IndexRequest("twitter-tweets","tweets",id).source(record.value(), XContentType.JSON);
                     //id is to make consumer idempotent
                     IndexResponse indexResponse =client.index(indexRequest, RequestOptions.DEFAULT);
 
@@ -105,7 +116,10 @@ public class ConsumerElasticsearch {
                     Thread.sleep(1000);  //introduced small delay to see results clearly
 
                 }
-
+                logger.info("Committing");
+                consumer.commitSync();
+                logger.info("Offset committed");
+                Thread.sleep(1000);
 
         }
             ///client.close();
