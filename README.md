@@ -16,12 +16,17 @@
  <br>
  
  Steps -
- * Create Twitter Client <br>
+ * <b>Create Twitter Client </b><br>
  We don't want all the tweets, just the selected one. In this case we have taken the condition that, only take those tweets 
  with keyword "bitcoin" and "kafka". We can take as many terms as we want. Declare the host you want to connect to, the endpoint, and authentication.
  To connect to Twitter API first condition is to create a [Twitter Developer Account](https://developer.twitter.com/en), and create an application.
  You'll get few credentials which are required for the authentication. Connect to the client `client.connect()` and we are done. <br>
  
+ * Create Kafka Producer <br>
+ After the client let's create the producer. Client will fetch the desired tweets from Twitter and store in an ArrayList(msgQueue).
+ For producer, first of all define the `Kafka-Topic`. We need to manually create this topic through `kafka-topics --zookeeper localhost:2181 --create --topic twitter-tweets --partitions 6 --replication-factor 1`.
+ My topic name is `twitter-tweets`. The message(messageQueue.poll()) will be taken from the messageQueue to be produced to Kafka. <br>
+                                                                                                      
  
  
  
@@ -39,9 +44,10 @@
  
  
  
+ <br>
+ <br>
+ <br>
  
- fetch realtime data from twitter - <br>
- * Create a twitter client<br>
  * Create Kafka Producer
  * You need to manually create the topic used by producer. In my case it is twitter-tweets.
  `kafka-topics --zookeeper localhost:2181 --create --topic twitter-tweets --partitions 6 --replication-factor 1`
