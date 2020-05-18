@@ -8,6 +8,7 @@
         <outputRelativeToContentRoot value="true" />
         <module name="Elasticsearch-Consumer" />
         <module name="Twitter-producer" />
+        <module name="Kafka-streams-filter-tweets" />
       </profile>
     </annotationProcessing>
   </component>

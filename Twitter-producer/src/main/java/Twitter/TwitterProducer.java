@@ -102,7 +102,7 @@ public class TwitterProducer {
         StatusesFilterEndpoint hosebirdEndpoint = new StatusesFilterEndpoint();
 
 
-        List<String> terms = Lists.newArrayList("Kafka");
+        List<String> terms = Lists.newArrayList("Kafka", "bitcoin");
 
         hosebirdEndpoint.trackTerms(terms);
 

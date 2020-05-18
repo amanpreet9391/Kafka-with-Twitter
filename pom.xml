@@ -25,6 +25,7 @@
     <modules>
         <module>Elasticsearch-Consumer</module>
         <module>Twitter-producer</module>
+        <module>Kafka-streams-filter-tweets</module>
     </modules>
     <dependencies>
         <!-- https://mvnrepository.com/artifact/org.apache.kafka/kafka-clients -->
