@@ -26,7 +26,10 @@
  After the client let's create the producer. Client will fetch the desired tweets from Twitter and store in an ArrayList(msgQueue).
  For producer, first of all define the `Kafka-Topic`. We need to manually create this topic through `kafka-topics --zookeeper localhost:2181 --create --topic twitter-tweets --partitions 6 --replication-factor 1`.
  My topic name is `twitter-tweets`. The message(messageQueue.poll()) will be taken from the messageQueue to be produced to Kafka. To learn more refer the [link](https://docs.confluent.io/current/clients/java.html). <br>
+ <img width="1680" alt="Screenshot 2020-05-19 at 2 43 41 AM" src="https://user-images.githubusercontent.com/25201552/82261546-d5316500-997c-11ea-85da-90eaeca28bf0.png"><br>
+ Here is the output format from producer. It will start shwoing up the desired tweets. <br>
  
+
  * <b>Create Elasticsearch Client</b> <br>
  For free ElasticSearch cluster refer to [app.bonsai.io](https://bonsai.io/). Signup and create free cluster with 3 nodes. This will give your own elasticsearch cluster.
  You need to provide credentials here as well, which are available in `Access`section of bonsai. This client will allow us to insert data in elasticsearch.<br>
@@ -36,7 +39,11 @@
  Kafka topic i.e. `twitter-tweets`.For now we are displaying the number of recieved tweets and then forwarding them to 
  ElasticSearch. An ID is generated through which you can access the exact tweet in Elasticsearch by `GET /twitter-tweets/tweets/ID`
  <br>
-                                                                                                      
+Note - Before trying to run producer and consumer, there are two things one has to make sure first. <br>
+ (1) Zookeeper should be running.
+ To run zookeeper - ` zookeeper-server-start config/zookeeper.properties`.
+ (2) Kafka server should be running.
+ To run a kafka server - ` kafka-server-start config/kafka.properties`.                                                                                                      
  
  
  
