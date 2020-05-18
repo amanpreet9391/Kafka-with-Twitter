@@ -37,8 +37,12 @@
  * <b>Create Kafka Consumer</b> <br>
  For consumer, first of all create properties, then create consumer and then subscribe the consumer with the 
  Kafka topic i.e. `twitter-tweets`.For now we are displaying the number of recieved tweets and then forwarding them to 
- ElasticSearch. An ID is generated through which you can access the exact tweet in Elasticsearch by `GET /twitter-tweets/tweets/ID`
- <br>
+ ElasticSearch. An ID is generated through which you can access the exact tweet in Elasticsearch by `GET /twitter-tweets/tweets/ID`<br>
+ <img width="1668" alt="Screenshot 2020-05-19 at 2 58 16 AM" src="https://user-images.githubusercontent.com/25201552/82262010-c13a3300-997d-11ea-901b-fceb83a27162.png">
+We got an ID `hbuuKXIBvbRgTsLvXfCH`, then after running `GET twitter-tweets/tweets/hbuuKXIBvbRgTsLvXfCH`, we got the complete information of that
+tweet in JSON format.<br>
+ 
+ 
 Note - Before trying to run producer and consumer, there are two things one has to make sure first. <br>
  (1) Zookeeper should be running.
  To run zookeeper - ` zookeeper-server-start config/zookeeper.properties`.
