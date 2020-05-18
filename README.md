@@ -47,7 +47,10 @@ Note - Before trying to run producer and consumer, there are two things one has 
  (1) Zookeeper should be running.
  To run zookeeper - ` zookeeper-server-start config/zookeeper.properties`.
  (2) Kafka server should be running.
- To run a kafka server - ` kafka-server-start config/kafka.properties`.                                                                                                      
+ To run a kafka server - ` kafka-server-start config/kafka.properties`.    <br>
+ <b> Upcoming changes</b><br>
+ In future I am also planning to perform monitoring with the help of tools like grafana or prometheus. So stay tuned!
+                                                                                                   
  
  
  
