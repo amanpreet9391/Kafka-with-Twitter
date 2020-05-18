@@ -31,7 +31,11 @@
  For free ElasticSearch cluster refer to [app.bonsai.io](https://bonsai.io/). Signup and create free cluster with 3 nodes. This will give your own elasticsearch cluster.
  You need to provide credentials here as well, which are available in `Access`section of bonsai. This client will allow us to insert data in elasticsearch.
  <br>
- 
+ * <b> Create Kafka Consumer </b>  <br>
+ For consumer, first of all create properties, then create consumer and then subscribe the consumer with the 
+ Kafka topic i.e. `twitter-tweets`.For now we are displaying the number of recieved tweets and then forwarding them to 
+ ElasticSearch. An ID is generated through which you can access the exact tweet in Elasticsearch by `GET /twitter-tweets/tweets/ID`
+ <br>
                                                                                                       
  
  
@@ -54,9 +58,4 @@
  <br>
  <br>
  
- * Create Kafka Producer
- * You need to manually create the topic used by producer. In my case it is twitter-tweets.
- `kafka-topics --zookeeper localhost:2181 --create --topic twitter-tweets --partitions 6 --replication-factor 1`
- * Create Elasticsearch client
- * Create consumer
  
