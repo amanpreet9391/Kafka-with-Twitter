@@ -4,6 +4,9 @@
   Main idea behind this workflow is first to fetch required data(tweets) with the help of Twitter API and then storing that data in 
   ElasticSearch. Kafka is used as a messaging system. It collect data from Twitter and store in ElasticSearch. Lets try to make things a bit more clear with the help of a flow-diagram.<br>
  
+ <img width="802" alt="Screenshot 2021-04-01 at 3 06 51 AM" src="https://user-images.githubusercontent.com/25201552/113214629-62309480-9297-11eb-8cd8-82b93b8a80e4.png">
+
+ 
  <br>
  <img width="835" alt="Screenshot 2020-05-19 at 1 47 38 AM" src="https://user-images.githubusercontent.com/25201552/82255734-c47bf180-9972-11ea-9164-8e594afac7ca.png">
  
